@@ -333,8 +333,86 @@
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
+                loadProducts(this.textContent);
             });
         });
+
+        // 从API加载产品
+        async function loadProducts(category = '全部') {
+            try {
+                const res = await fetch('/api/products?category=' + encodeURIComponent(category));
+                const products = await res.json();
+                const grid = document.querySelector('.products-grid');
+                if (grid && products.length > 0) {
+                    grid.innerHTML = products.map(p => `
+                        <div class="product-card">
+                            <div class="product-image">🎬 演示视频</div>
+                            <div class="product-info">
+                                <h3>${p.name}</h3>
+                                <p>${p.description || ''}</p>
+                                <div class="product-tags">${(p.tags || '').split(',').map(t => `<span class="tag">${t.trim()}</span>`).join('')}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) { console.error('加载产品失败', e); }
+        }
+
+        // 从API加载新闻
+        async function loadNews() {
+            try {
+                const res = await fetch('/api/news');
+                const news = await res.json();
+                const grid = document.querySelector('.blog-grid');
+                if (grid && news.length > 0) {
+                    grid.innerHTML = news.slice(0, 6).map(n => `
+                        <div class="blog-card">
+                            <div class="blog-image">📰</div>
+                            <div class="blog-content">
+                                <span class="blog-tag">${n.category}</span>
+                                <h3>${n.title}</h3>
+                                <p>${(n.content || '').substring(0, 50)}...</p>
+                                <p class="blog-meta">${new Date(n.created_at).toLocaleDateString('zh-CN')}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) { console.error('加载新闻失败', e); }
+        }
+
+        // 提交咨询表单
+        document.querySelector('.contact-form form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const inputs = this.querySelectorAll('input, textarea');
+            const data = {
+                name: inputs[0].value,
+                company: inputs[1].value,
+                phone: inputs[2].value,
+                email: inputs[3].value,
+                description: inputs[4].value
+            };
+            
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('提交成功！我们会尽快与您联系。');
+                    this.reset();
+                } else {
+                    alert('提交失败，请稍后重试。');
+                }
+            } catch (e) {
+                alert('网络错误，请稍后重试。');
+            }
+        });
+
+        // 页面加载时获取数据
+        loadProducts();
+        loadNews();
     </script>
 </body>
 </html>
