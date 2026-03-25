@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIHub - AI驱动的科技公司</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        
+        /* 导航栏 */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 60px; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: bold; color: #fff; }
+        .logo span { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: rgba(255, 255, 255, 0.8); text-decoration: none; font-size: 15px; transition: color 0.3s; }
+        .nav-links a:hover { color: #fff; }
+        
+        /* 通用样式 */
+        .section { padding: 100px 60px; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 40px; font-weight: 700; margin-bottom: 16px; }
+        .section-title p { color: #666; font-size: 18px; }
+        .btn { padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; border: none; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: transparent; color: #667eea; border: 2px solid #667eea; }
+        .btn-secondary:hover { background: #667eea; color: #fff; }
+        .btn-group { display: flex; gap: 20px; justify-content: center; }
+        
+        /* Hero区 */
+        .hero { height: 100vh; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%); display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; width: 200%; height: 200%; background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 50%); animation: pulse 15s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: translate(-25%, -25%); } 50% { transform: translate(-30%, -30%); } }
+        .hero-content { position: relative; z-index: 1; }
+        .hero h1 { font-size: 56px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+        .hero h1 span { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 20px; color: rgba(255, 255, 255, 0.7); margin-bottom: 40px; }
+        
+        /* 核心能力 */
+        .features { background: #fff; }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .feature-card { text-align: center; padding: 40px 30px; border-radius: 16px; background: #f8f9fa; transition: all 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .feature-icon { font-size: 48px; margin-bottom: 20px; }
+        .feature-card h3 { font-size: 20px; margin-bottom: 12px; }
+        .feature-card p { color: #666; font-size: 14px; }
+        
+        /* 产品展示 */
+        .products { background: #0a0a0a; }
+        .products .section-title h2 { color: #fff; }
+        .products .section-title p { color: rgba(255, 255, 255, 0.6); }
+        .filter-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 50px; flex-wrap: wrap; }
+        .filter-tab { padding: 10px 24px; border-radius: 20px; background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.7); border: none; cursor: pointer; transition: all 0.3s; }
+        .filter-tab.active, .filter-tab:hover { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+        .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .product-card { background: #1a1a1a; border-radius: 16px; overflow: hidden; transition: all 0.3s; cursor: pointer; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(102, 126, 234, 0.2); }
+        .product-image { height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; }
+        .product-info { padding: 24px; }
+        .product-info h3 { color: #fff; font-size: 18px; margin-bottom: 8px; }
+        .product-info p { color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 16px; }
+        .product-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { padding: 4px 12px; background: rgba(102, 126, 234, 0.2); color: #667eea; border-radius: 4px; font-size: 12px; }
+        
+        /* 解决方案 */
+        .solutions { background: #fff; }
+        .solutions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .solution-card { background: #f8f9fa; border-radius: 16px; padding: 40px 30px; transition: all 0.3s; }
+        .solution-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .solution-icon { font-size: 48px; margin-bottom: 20px; }
+        .solution-card h3 { font-size: 24px; margin-bottom: 16px; }
+        .solution-card ul { list-style: none; margin-bottom: 20px; }
+        .solution-card li { padding: 8px 0; color: #666; }
+        .solution-card li::before { content: '→ '; color: #667eea; }
+        
+        /* 数据统计 */
+        .stats { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 60px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; max-width: 1200px; margin: 0 auto; text-align: center; }
+        .stat-item h3 { font-size: 48px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .stat-item p { color: rgba(255, 255, 255, 0.8); font-size: 16px; }
+        
+        /* 关于我们 */
+        .about { background: #fff; }
+        .about-content { max-width: 1200px; margin: 0 auto; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+        .about-text h3 { font-size: 28px; margin-bottom: 20px; }
+        .about-text p { color: #666; margin-bottom: 16px; font-size: 16px; line-height: 1.8; }
+        .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; }
+        .team-member { text-align: center; }
+        .team-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; }
+        .team-member h4 { font-size: 16px; margin-bottom: 4px; }
+        .team-member p { font-size: 14px; color: #666; }
+        
+        /* 新闻 */
+        .blog { background: #f8f9fa; }
+        .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .blog-card { background: #fff; border-radius: 16px; overflow: hidden; transition: all 0.3s; }
+        .blog-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
+        .blog-image { height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 48px; }
+        .blog-content { padding: 24px; }
+        .blog-tag { display: inline-block; padding: 4px 12px; background: #f0f0ff; color: #667eea; border-radius: 4px; font-size: 12px; margin-bottom: 12px; }
+        .blog-card h3 { font-size: 18px; margin-bottom: 8px; line-height: 1.4; }
+        .blog-card p { color: #666; font-size: 14px; margin-bottom: 12px; line-height: 1.6; }
+        .blog-meta { font-size: 12px; color: #999; }
+        
+        /* 联系我们 */
+        .contact { background: #0a0a0a; }
+        .contact .section-title h2 { color: #fff; }
+        .contact .section-title p { color: rgba(255, 255, 255, 0.6); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; }
+        .contact-form { background: #1a1a1a; padding: 40px; border-radius: 16px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 14px 16px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 14px; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #667eea; }
+        .form-group textarea { height: 120px; resize: none; }
+        .contact-info { color: rgba(255, 255, 255, 0.8); }
+        .contact-info h3 { color: #fff; font-size: 24px; margin-bottom: 30px; }
+        .contact-item { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+        .contact-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(102, 126, 234, 0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .contact-item h4 { color: #fff; font-size: 16px; margin-bottom: 4px; }
+        .contact-item p { font-size: 14px; }
+        
+        /* 页脚 */
+        .footer { background: #0a0a0a; border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 60px; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+        .footer-brand h3 { color: #fff; font-size: 24px; margin-bottom: 16px; }
+        .footer-brand p { color: rgba(255, 255, 255, 0.6); font-size: 14px; line-height: 1.6; }
+        .footer-links h4 { color: #fff; font-size: 16px; margin-bottom: 16px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: rgba(255, 255, 255, 0.6); text-decoration: none; font-size: 14px; transition: color 0.3s; }
+        .footer-links a:hover { color: #667eea; }
+        .footer-bottom { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.4); font-size: 14px; }
+        
+        /* 响应式 */
+        @media (max-width: 1024px) {
+            .features-grid, .products-grid, .stats-grid, .solutions-grid, .blog-grid { grid-template-columns: repeat(2, 1fr); }
+            .about-grid, .contact-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-content { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 20px; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 36px; }
+            .section { padding: 60px 20px; }
+            .features-grid, .products-grid, .stats-grid, .solutions-grid, .blog-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo"><span>AI</span>Hub</div>
+        <div class="nav-links">
+            <a href="#home">首页</a>
+            <a href="#products">产品展示</a>
+            <a href="#solutions">解决方案</a>
+            <a href="#about">关于我们</a>
+            <a href="#news">新闻动态</a>
+            <a href="#contact">联系我们</a>
+        </div>
+    </nav>
+
+    <!-- Hero区 -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>用<span>AI</span>驱动业务增长</h1>
+            <p>从想法到落地，一站式AI解决方案</p>
+            <div class="btn-group">
+                <a href="#contact" class="btn btn-primary">开始咨询</a>
+                <a href="#products" class="btn btn-secondary">查看案例</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心能力 -->
+    <section class="section features">
+        <div class="section-title"><h2>核心能力</h2><p>全方位AI技术支持，助力企业数字化转型</p></div>
+        <div class="features-grid">
+            <div class="feature-card"><div class="feature-icon">🤖</div><h3>AI开发</h3><p>大模型开发<br>Agent智能体<br>定制化解决方案</p></div>
+            <div class="feature-card"><div class="feature-icon">📊</div><h3>数据分析</h3><p>数据可视化<br>智能报表<br>决策支持</p></div>
+            <div class="feature-card"><div class="feature-icon">🎨</div><h3>AI创意</h3><p>AI绘画<br>视频生成<br>内容创作</p></div>
+            <div class="feature-card"><div class="feature-icon">⚡</div><h3>效率提升</h3><p>自动化工作流<br>智能助手<br>流程优化</p></div>
+        </div>
+    </section>
+
+    <!-- 产品展示 -->
+    <section id="products" class="section products">
+        <div class="section-title"><h2>我们的AI项目</h2><p>真实案例，看得见的效果</p></div>
+        <div class="filter-tabs">
+            <button class="filter-tab active">全部</button>
+            <button class="filter-tab">大模型</button>
+            <button class="filter-tab">Agent</button>
+            <button class="filter-tab">RAG</button>
+            <button class="filter-tab">工具</button>
+        </div>
+        <div class="products-grid">
+            <div class="product-card"><div class="product-image">🎬 演示视频</div><div class="product-info"><h3>AI智能客服系统</h3><p>基于RAG的企业级智能客服，支持多轮对话</p><div class="product-tags"><span class="tag">Agent</span><span class="tag">RAG</span></div></div></div>
+            <div class="product-card"><div class="product-image">🎬 演示视频</div><div class="product-info"><h3>智能商品推荐引擎</h3><p>个性化推荐系统，提升转化率30%</p><div class="product-tags"><span class="tag">RAG</span><span class="tag">电商</span></div></div></div>
+            <div class="product-card"><div class="product-image">🎬 演示视频</div><div class="product-info"><h3>企业知识库平台</h3><p>智能问答+文档管理，企业知识沉淀</p><div class="product-tags"><span class="tag">RAG</span><span class="tag">知识库</span></div></div></div>
+            <div class="product-card"><div class="product-image">🎬 演示视频</div><div class="product-info"><h3>AI内容生成工具</h3><p>一键生成营销文案、产品描述</p><div class="product-tags"><span class="tag">大模型</span><span class="tag">营销</span></div></div></div>
+            <div class="product-card"><div class="product-image">🎬 演示视频</div><div class="product-info"><h3>智能数据分析平台</h3><p>自然语言查询数据库，自动生成报表</p><div class="product-tags"><span class="tag">工具</span><span class="tag">数据</span></div></div></div>
+            <div class="product-card"><div class="product-image">🎬 演示视频</div><div class="product-info"><h3>AI视频生成系统</h3><p>文本一键生成短视频，批量内容生产</p><div class="product-tags"><span class="tag">大模型</span><span class="tag">视频</span></div></div></div>
+        </div>
+    </section>
+
+    <!-- 数据统计 -->
+    <section class="stats"><div class="stats-grid"><div class="stat-item"><h3>50+</h3><p>AI项目落地</p></div><div class="stat-item"><h3>100+</h3><p>服务客户</p></div><div class="stat-item"><h3>98%</h3><p>客户好评率</p></div><div class="stat-item"><h3>24h</h3><p>快速响应</p></div></div></section>
+
+    <!-- 解决方案 -->
+    <section id="solutions" class="section solutions">
+        <div class="section-title"><h2>解决方案</h2><p>针对不同行业的AI解决方案，助力业务增长</p></div>
+        <div class="solutions-grid">
+            <div class="solution-card"><div class="solution-icon">🛒</div><h3>电商行业</h3><ul><li>智能客服系统</li><li>商品智能推荐</li><li>营销文案自动生成</li><li>用户评论分析</li></ul><a href="#contact" class="btn btn-secondary">了解详情</a></div>
+            <div class="solution-card"><div class="solution-icon">🏦</div><h3>金融行业</h3><ul><li>智能投顾助手</li><li>风险评估系统</li><li>合规智能审核</li><li>反欺诈检测</li></ul><a href="#contact" class="btn btn-secondary">了解详情</a></div>
+            <div class="solution-card"><div class="solution-icon">🎓</div><h3>教育行业</h3><ul><li>AI学习助手</li><li>智能题库系统</li><li>作文智能批改</li><li>个性化学习路径</li></ul><a href="#contact" class="btn btn-secondary">了解详情</a></div>
+            <div class="solution-card"><div class="solution-icon">🏥</div><h3>医疗健康</h3><ul><li>智能问诊助手</li><li>病历智能分析</li><li>医学影像识别</li><li>健康咨询机器人</li></ul><a href="#contact" class="btn btn-secondary">了解详情</a></div>
+            <div class="solution-card"><div class="solution-icon">🏭</div><h3>制造业</h3><ul><li>质量检测AI</li><li>设备预测维护</li><li>生产流程优化</li><li>供应链智能分析</li></ul><a href="#contact" class="btn btn-secondary">了解详情</a></div>
+            <div class="solution-card"><div class="solution-icon">🏢</div><h3>企业服务</h3><ul><li>企业知识库</li><li>智能办公助手</li><li>数据分析平台</li><li>自动化工作流</li></ul><a href="#contact" class="btn btn-secondary">了解详情</a></div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="section about">
+        <div class="section-title"><h2>关于我们</h2><p>AI驱动的技术创新公司</p></div>
+        <div class="about-content">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h3>我们是谁</h3>
+                    <p>AIHub是一家AI驱动的科技公司，专注于AI软件开发与AI中转服务。我们帮助企业快速接入AI能力，实现智能化转型。</p>
+                    <p>我们的核心业务包括：AI软件开发、大模型应用开发、AI中转API服务、企业AI解决方案定制。</p>
+                    <h3 style="margin-top:30px;">我们的服务</h3>
+                    <p>🚀 AI软件开发 - 根据业务需求定制开发AI应用</p>
+                    <p>🔌 AI中转服务 - 提供稳定、低成本的AI API接入</p>
+                    <p>🏢 企业解决方案 - 为企业提供完整的AI转型方案</p>
+                    <p>💡 技术咨询 - AI技术咨询与架构设计</p>
+                </div>
+                <div class="about-text">
+                    <h3>为什么选择我们</h3>
+                    <p>✅ 技术专业：深耕AI领域，技术实力过硬</p>
+                    <p>✅ 服务稳定：7x24小时技术支持，快速响应</p>
+                    <p>✅ 成本优势：AI中转服务，降低使用成本</p>
+                    <p>✅ 定制开发：根据业务需求量身定制</p>
+                    <p>✅ 隐私保护：数据安全，隐私有保障</p>
+                    <p>✅ 持续迭代：紧跟AI前沿，持续升级</p>
+                </div>
+            </div>
+            <div class="team-grid" style="grid-template-columns: repeat(5, 1fr);">
+                <div class="team-member"><div class="team-avatar">👨‍💼</div><h4>小黑</h4><p>CEO</p></div>
+                <div class="team-member"><div class="team-avatar">👨‍💻</div><h4>佩奇</h4><p>CTO</p></div>
+                <div class="team-member"><div class="team-avatar">👩‍🎨</div><h4>小白</h4><p>产品 + 设计师</p></div>
+                <div class="team-member"><div class="team-avatar">📋</div><h4>小K</h4><p>项目经理</p></div>
+                <div class="team-member"><div class="team-avatar">🤖</div><h4>二条</h4><p>项目助理</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 新闻动态 -->
+    <section id="news" class="section blog">
+        <div class="section-title"><h2>新闻动态</h2><p>了解AIHub最新资讯</p></div>
+        <div class="blog-grid">
+            <div class="blog-card"><div class="blog-image">📰</div><div class="blog-content"><span class="blog-tag">公司新闻</span><h3>AIHub发布新一代AI中转平台</h3><p>更稳定、更快速、更经济的AI API服务正式上线...</p><p class="blog-meta">2026-03-20</p></div></div>
+            <div class="blog-card"><div class="blog-image">🚀</div><div class="blog-content"><span class="blog-tag">产品更新</span><h3>智能客服系统2.0版本发布</h3><p>新增多轮对话、情感分析等功能...</p><p class="blog-meta">2026-03-18</p></div></div>
+            <div class="blog-card"><div class="blog-image">🤝</div><div class="blog-content"><span class="blog-tag">合作动态</span><h3>AIHub与某电商平台达成合作</h3><p>为其提供智能推荐系统解决方案...</p><p class="blog-meta">2026-03-15</p></div></div>
+            <div class="blog-card"><div class="blog-image">🏆</div><div class="blog-content"><span class="blog-tag">荣誉资质</span><h3>AIHub荣获年度最佳AI服务商</h3><p>在2026年度AI行业峰会上获此殊荣...</p><p class="blog-meta">2026-03-12</p></div></div>
+            <div class="blog-card"><div class="blog-image">💡</div><div class="blog-content"><span class="blog-tag">技术分享</span><h3>如何选择适合企业的AI方案</h3><p>从需求分析到落地实施的全流程指南...</p><p class="blog-meta">2026-03-10</p></div></div>
+            <div class="blog-card"><div class="blog-image">📈</div><div class="blog-content"><span class="blog-tag">公司动态</span><h3>AIHub团队扩展至50人</h3><p>持续招贤纳士，加速产品研发...</p><p class="blog-meta">2026-03-08</p></div></div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="section contact">
+        <div class="section-title"><h2>联系我们</h2><p>期待与您的合作</p></div>
+        <div class="contact-grid">
+            <div class="contact-form">
+                <form>
+                    <div class="form-group"><label>您的姓名</label><input type="text" placeholder="请输入您的姓名"></div>
+                    <div class="form-group"><label>公司名称</label><input type="text" placeholder="请输入公司名称"></div>
+                    <div class="form-group"><label>联系电话</label><input type="tel" placeholder="请输入联系电话"></div>
+                    <div class="form-group"><label>电子邮箱</label><input type="email" placeholder="请输入电子邮箱"></div>
+                    <div class="form-group"><label>需求描述</label><textarea placeholder="请描述您的需求..."></textarea></div>
+                    <button type="submit" class="btn btn-primary" style="width:100%;">提交咨询</button>
+                </form>
+            </div>
+            <div class="contact-info">
+                <h3>联系方式</h3>
+                <div class="contact-item"><div class="contact-icon">📧</div><div><h4>电子邮箱</h4><p>robertwan2088@gmail.com</p></div></div>
+                <div class="contact-item"><div class="contact-icon">⏰</div><div><h4>工作时间</h4><p>周一至周五 9:00-18:00</p></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand"><h3><span style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span>Hub</h3><p>从想法到落地，一站式AI解决方案<br>让AI技术真正为企业创造价值</p></div>
+            <div class="footer-links"><h4>产品服务</h4><ul><li><a href="#products">产品展示</a></li><li><a href="#solutions">解决方案</a></li><li><a href="#">案例研究</a></li></ul></div>
+            <div class="footer-links"><h4>关于我们</h4><ul><li><a href="#about">公司介绍</a></li><li><a href="#">团队</a></li><li><a href="#news">新闻动态</a></li></ul></div>
+            <div class="footer-links"><h4>联系我们</h4><ul><li><a href="#contact">联系方式</a></li><li><a href="#">加入我们</a></li><li><a href="#">合作咨询</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">© 2026 AIHub. All rights reserved.</div>
+    </footer>
+
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+            }
+        });
+
+        // 产品筛选
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
